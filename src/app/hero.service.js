@@ -13,8 +13,19 @@ var mock_heros_1 = require('./mock-heros');
 var HeroService = (function () {
     function HeroService() {
     }
-    HeroService.prototype.getHeros = function () {
+    HeroService.prototype.getHeroes = function () {
         return Promise.resolve(mock_heros_1.HEROES);
+    };
+    HeroService.prototype.getHeroesSlowly = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            // Simulate server latency with 2 second delay
+            setTimeout(function () { return resolve(_this.getHeroes()); }, 5000);
+        });
+    };
+    HeroService.prototype.getHero = function (id) {
+        console.log("hero.service.ts getHero id: " + id);
+        return this.getHeroes().then(function (heroes) { return heroes.find(function (hero) { return hero.id === id; }); });
     };
     HeroService = __decorate([
         core_1.Injectable(), 
